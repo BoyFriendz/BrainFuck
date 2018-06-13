@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="BrainFuck"/>
+  <qresource prefix="image">
+    <file>C:/Users/DELL/Pictures/说明.png</file>
+  </qresource>
+</RCC>
