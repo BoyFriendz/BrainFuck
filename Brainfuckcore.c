@@ -1,14 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<Windows.h>
 
-int bfcore(char *code,char *input) {
+int bfexecute(char *code,char *input) {
 	int *adr = (int *)malloc(strlen(code)* sizeof(int));
 	int i, k, j;
 	int n = 0;
 	int ptr = 0;
 	int illegalinput = 0;
-	for (i = 0; i <1000; i++)
+	for (i = 0; i <strlen(code); i++)
 		adr[i] = 0;
 	for (i = 0; i < strlen(code); i++) {
 		switch (code[i])
@@ -64,6 +65,7 @@ int bfcore(char *code,char *input) {
 			illegalinput++;
 			break;
 		}
+		Sleep(1);
 	}
 }
 
@@ -122,4 +124,71 @@ int boundry(char *code) {
 			return 0;
 	}
 	return 1;
+}
+
+int onestep(char c,int ptr,char **adr,int i) {
+	int k, j;
+	switch (c)
+	{
+	case '>':
+		++ptr;
+		break;
+	case '<':
+		--ptr;
+		break;
+	case '+':
+		++*adr[ptr];
+		break;
+	case '-':
+		--*adr[ptr];
+		break;
+	case '.':
+		putchar(*adr[ptr]);
+		break;
+	case ',':
+		*adr[ptr] = getchar();
+		break;
+	case '[':
+		k = 0, j = 0;
+		if (*adr[ptr] == 0) {
+			k = 1, j = 0;
+			i++;
+			while (k != j) {
+				if (c == ']')
+					k++;
+				if (c == '[')
+					j++;
+				i++;
+			}
+			i--;
+		}
+		break;
+	case ']':
+		if (adr[ptr] != 0) {
+			k = 1, j = 0;
+			i--;
+			while (k != j) {
+				if (c == ']')
+					k++;
+				if (c == '[')
+					j++;
+				i--;
+			}
+			i++;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+int main() {
+	char *code = "++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++.<<+++++++++++++++.>.+++.------.--------.>+.>.";
+	char input[27] = { 0 };
+	int i;
+	for (i = 0; i < 26; i++) {
+		input[i] = i + 'a';
+	}
+	input[1] = '\n';
+	bfexecute(code, input);
 }
